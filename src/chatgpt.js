@@ -27,7 +27,7 @@ export default class ChatGPT {
 
   generatePrompt = (patch) => {
     const answerLanguage = `Answer me in ${this.language},`;
-    return `下面是gitlab代码代码，请帮我做一个简短的代码审查, 不需要前面的描述，只需要输出以下两点 1潜在问题限制在100字以内，2 是否存在安全漏洞，3改进建议，用代码给出 ${answerLanguage} 
+    return `下面是gitlab代码代码，请帮我做一个简短的代码审查, 不需要前面的描述，需要严格按照如下回答模版，输出以下两点 1潜在问题限制在100字以内，2 是否存在安全漏洞，3改进建议，用代码给出 ${answerLanguage} 
     ${patch}
     `;
   };
@@ -81,11 +81,10 @@ export default class ChatGPT {
       return "";
     }
     const prompt = this.generatePrompt(patch);
-    console.log("prompt", prompt);
+    // console.log("prompt", prompt);
     const res = await this.sendDeepSeek(prompt);
 
     if (res.status === 200) {
-      console.log(res.data);
       return res.data.response;
     } else {
       return "暂无建议";

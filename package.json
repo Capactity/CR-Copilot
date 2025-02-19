@@ -2,6 +2,7 @@
   "name": "ytest",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "nodemon src/index.js",
     "build": "npx webpack --config webpack.config.js"

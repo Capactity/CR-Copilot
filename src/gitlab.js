@@ -146,21 +146,27 @@ export default class Gitlab {
       });
   }
 
+  // 异步代码审查函数
   async codeReview({ change, message, ref }) {
+    // 解构赋值，获取change对象的lastNewLine、lastOldLine、newPath、oldPath属性
     const { lastNewLine = -1, lastOldLine = -1, newPath, oldPath } = change;
 
+    // 如果lastNewLine和lastOldLine都为-1，则输出错误信息
     if (lastNewLine === -1 && lastOldLine === -1) {
       logger.error("Code line error");
       return;
     }
 
+    // 定义params对象
     const params = {};
 
+    // 如果lastOldLine不为-1，则将lastOldLine和oldPath赋值给params对象的oldLine和oldPath属性
     if (lastOldLine !== -1) {
       params.oldLine = lastOldLine;
       params.oldPath = oldPath;
     }
 
+    // 如果lastNewLine不为-1，则将lastNewLine和newPath赋值给params对象的newLine和newPath属性
     if (lastNewLine !== -1) {
       params.newLine = lastNewLine;
       params.newPath = newPath;
