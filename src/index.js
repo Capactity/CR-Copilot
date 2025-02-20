@@ -7,7 +7,7 @@ import * as dotenv from "dotenv";
 
 const app = express();
 
-let stopLoop = false;
+// let stopLoop = false;
 
 dotenv.config();
 app.use(cors());
@@ -30,13 +30,14 @@ app.post("/code-review", async (req, res) => {
       accessToken: query.access_token,
     });
     const { state, changes, ref } = await gitlab.getChanges();
+    console.log("changes", changes.length);
     if(changes.length === 0) {
       // console.log("no changes");
       return res.status(200).send({ status: "200", msg: "no changes" });
     }
     if (state !== "opened") {
       console.log("MR is closed");
-      stopLoop = true;
+      // stopLoop = true;
       return res.status(200).send({ status: "200", msg: "MR is closed" });
     }
     if (!chatgpt) {
@@ -44,13 +45,14 @@ app.post("/code-review", async (req, res) => {
       return res.status(200).send({ status: "200", msg: "ChatGpt is null" });
     }
     for (let i = 0; i <= changes.length; i += 1) {
-      if(stopLoop) {
-        break;
-      }
+      // console.log("i", i);
+      // if(stopLoop) {
+      //   break;
+      // }
       if(i === changes.length) {
         const message = '本次变更涉及的所有代码审查已完成，供参考，谢谢！';
         await gitlab.codeReview({ message, ref, change: changes[i - 1] });
-        stopLoop = true;
+        // stopLoop = true;
       } else {
         const change = changes[i];
         const message = await chatgpt.codeReview(change.diff);

@@ -72,7 +72,7 @@ export default class Gitlab {
     
     // this.target = /\.(py|js|ts|jsx|tsx|html|vue|md|ya?ml|json)$/;
     // 保存需要检测的文件类型
-    this.target = /\.(py|ts|jsx|tsx|html|vue|java)$/;
+    this.target = /\.(py|js|ts|jsx|tsx|html|vue|java)$/;
   }
 
   /**

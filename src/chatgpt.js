@@ -85,6 +85,7 @@ export default class ChatGPT {
     const res = await this.sendDeepSeek(prompt);
 
     if (res.status === 200) {
+      // console.log("res", res.data);
       return res.data.response;
     } else {
       return "暂无建议";
