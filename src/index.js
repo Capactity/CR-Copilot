@@ -69,6 +69,6 @@ app.use((err, req, res, next) => {
   logger.error("something run err...");
   res.status(500).json({ message: err.message });
 });
-app.listen(4000, () => {
+app.listen(4000, '0.0.0.0',() => {
   console.log("listening on 4000...");
 });

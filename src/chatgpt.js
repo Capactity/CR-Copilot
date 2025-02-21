@@ -49,9 +49,6 @@ export default class ChatGPT {
   };
 
 
-
-
-
   sendDeepSeek = async (prompt) => {
     const host = "http://192.168.1.210:11434";
     const request = createRequest(host, {});
@@ -74,6 +71,38 @@ export default class ChatGPT {
       });
   };
 
+//   curl https://api.lkeap.cloud.tencent.com/v1/chat/completions \
+// -H "Content-Type: application/json" \
+// -H "Authorization: Bearer sk-BM3Ezl79rnE88jQw8tSbJGTElj8Dcom4GF6ihGMy8sHw6mRY" \
+// -d '{
+//   "model": "deepseek-r1",
+//   "messages": [
+//         {
+//             "role": "user",
+//             "content": "为什么草是绿的？"
+//         }
+//     ],
+//   "stream": false
+// }'
+  // 腾讯云deepseek
+  sendDeepSeekCloud = async (prompt) => {
+    const host = "https://api.lkeap.cloud.tencent.com";
+    console.log("host", host);
+    const request = createRequest(host, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer sk-BM3Ezl79rnE88jQw8tSbJGTElj8Dcom4GF6ihGMy8sHw6mRY`,
+      },
+    });
+    return request
+      .post(`/v1/chat/completions`, {
+        model: "deepseek-r1",
+        messages: [{role: "user", content: prompt}],
+        stream: false,
+      });
+  };
+
+
 
   codeReview = async (patch) => {
     if (!patch) {
@@ -82,10 +111,11 @@ export default class ChatGPT {
     }
     const prompt = this.generatePrompt(patch);
     // console.log("prompt", prompt);
+    // const res = await this.sendDeepSeekCloud(prompt);
     const res = await this.sendDeepSeek(prompt);
 
     if (res.status === 200) {
-      // console.log("res", res.data);
+      console.log("res", res);
       return res.data.response;
     } else {
       return "暂无建议";
