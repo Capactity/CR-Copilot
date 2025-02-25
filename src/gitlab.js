@@ -69,10 +69,9 @@ export default class Gitlab {
     // 保存项目id
     this.projectId = projectId;
     // 需要检测的文件类型仅为 python,js,ts,jsx,tsx, html, vue, java
-    
-    // this.target = /\.(py|js|ts|jsx|tsx|html|vue|md|ya?ml|json)$/;
+
     // 保存需要检测的文件类型
-    this.target = /\.(py|js|ts|jsx|tsx|html|vue|java)$/;
+    this.target = /\.(py|js|ts|jsx|tsx|html|vue|java|dart)$/;
   }
 
   /**

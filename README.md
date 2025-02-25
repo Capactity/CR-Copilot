@@ -33,6 +33,7 @@ Webhook URL示例:`http://xxx:4000/code-review?access_token=<access_token>`
 - [x] 支持代码变更文件按模块发送和回复评论
 - [x] 并发不同项目mr请求处理的问题（暂时看起来没什么问题）
 - [x] review结束添加说明语句
+- [ ] 再次提交commit时，不做review
 - [ ] 完整的log日志
 - [ ] 添加仓库白名单
 - [ ] 过长文本截断（目前deepseek单次请求上限是128000个token - 9.6w的英文单词）输入超出限制是，系统会自动启动分层，对上下文压缩
