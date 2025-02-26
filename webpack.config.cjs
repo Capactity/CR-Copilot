@@ -1,4 +1,5 @@
 const path = require("path");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 module.exports = {
   entry: "./src/index.js", // 入口文件
   output: {
@@ -10,4 +11,11 @@ module.exports = {
   externals: {
     mysql: "commonjs",
   },
+  plugins: [
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: "assets", to: "assets" },
+      ],
+    }),
+  ],
 };

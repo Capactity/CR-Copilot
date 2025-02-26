@@ -2,6 +2,7 @@ import createRequest from "./request.js";
 import { logger } from "./utils.js";
 import camelCase from "camelcase";
 
+
 const formatByCamelCase = (obj) => {
   const target = Object.keys(obj).reduce((result, key) => {
     const newkey = camelCase(key);
@@ -59,7 +60,7 @@ export default class Gitlab {
 
   constructor({ projectId, mrIId, accessToken }) {
     // 定义请求的主机地址
-    const host = 'https://app.bmetech.com';
+    const host = "https://app.bmetech.com";
     // 创建请求对象，并传入请求参数
     this.request = createRequest(host, {
       params: { private_token: accessToken },

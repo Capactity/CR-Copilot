@@ -110,12 +110,10 @@ export default class ChatGPT {
       return "";
     }
     const prompt = this.generatePrompt(patch);
-    // console.log("prompt", prompt);
     // const res = await this.sendDeepSeekCloud(prompt);
     const res = await this.sendDeepSeek(prompt);
 
     if (res.status === 200) {
-      console.log("res", res);
       return res.data.response;
     } else {
       return "暂无建议";
