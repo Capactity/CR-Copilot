@@ -53,6 +53,7 @@ app.post("/code-review", async (req, res) => {
       return res.status(200).send({ status: "200", msg: "ChatGpt is null" });
     }
     const tasks = await getTasks();
+    // 任务是否已经存在，如果存在，则不再创建新任务，不做二次审核
     if (tasks.some(task => task.mergeId === body.object_attributes.iid && task.project === body.project.name)) {
       console.log(`⚠️ 任务已存在: ${body.project.name} - ${body.object_attributes.iid}`);
       return res.status(200).send({ status: "200", msg: "Task already exists" });
