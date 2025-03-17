@@ -2,17 +2,17 @@ const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const Dotenv = require("dotenv-webpack");
 module.exports = {
-  entry: "./src/index.js", // 入口文件
+  entry: "./src/index.js",
   output: {
-    path: path.resolve(__dirname, "dist"), // 打包后的输出路径
+    path: path.resolve(__dirname, "dist"),
     filename: "bundle.js", // 打包后的输出文件名
   },
-  target: "node", // 打包为Node.js可用的代码
+  target: "node",
   //   externals: [nodeExternals()], // 排除Node.js核心模块
   externals: {
     mysql: "commonjs",
   },
-  mode: process.env.NODE_ENV === "production" ? "production" : "development", // 设置打包模式
+  mode: process.env.NODE_ENV === "production" ? "production" : "development",
   plugins: [
     new CopyWebpackPlugin({
       patterns: [

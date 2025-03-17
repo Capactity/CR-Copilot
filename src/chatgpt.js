@@ -1,10 +1,14 @@
 import createRequest from "./request.js";
 import { logger } from "./utils.js";
-import OpenAI from "openai";
-export default class ChatGPT {
-  constructor(config) {
-    this.language = "Chinese";
+import fs from 'fs';
+import path from 'path';
+const isDevelopment = process.env.NODE_ENV === "development";
+const configPath = path.resolve(process.cwd(), isDevelopment ? "assets/config.json" : "dist/assets/config.json");
+const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
 
+export default class ChatGPT {
+  constructor(configMsg) {
+    this.language = "Chinese";
   }
 
   generatePrompt = (patch) => {
@@ -14,24 +18,45 @@ export default class ChatGPT {
     `;
   };
 
-  // deepseek
-  sendDeepSeek = async (prompt) => {
-    const host = "http://xxx";
-    const request = createRequest(host, {});
+  // openai
+  sendChatGPT = async (prompt) => {
+    const API = config.api_config_chatgpt;
+    const request = createRequest(API.host, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${API.api_key}`,
+      },
+    });
     return request
       .post(`/api/generate`, {
-        model: "deepseek-r1:32b",
+        model: API.model,
+        prompt: prompt,
+        temperature: 1,
+        top_p: 1,
+        presence_penalty: 1,
+        stream: false,
+        max_tokens: 1000,
+      });
+  }
+
+  // deepseek
+  sendDeepSeek = async (prompt) => {
+    const API = config.api_config_deepseek;
+    const request = createRequest(API.host, {});
+    return request
+      .post(`/api/generate`, {
+        model: API.model,
         prompt: prompt,
         stream: false,
       });
   };
-  // 智谱api
+  // 智谱清言
   sendZP = async (prompt) => {
-    const host = "http://xxx";
-    const request = createRequest(host, {});
+    const API = config.api_config_glm;
+    const request = createRequest(API.host, {});
     return request
       .post(`/api/generate`, {
-        model: "glm-4",
+        model: API.model,
         prompt: prompt,
         stream: false,
       });
@@ -50,24 +75,6 @@ export default class ChatGPT {
 //     ],
 //   "stream": false
 // }'
-  // 腾讯云deepseek
-  sendDeepSeekCloud = async (prompt) => {
-    const host = "https://api.lkeap.cloud.tencent.com";
-    console.log("host", host);
-    const request = createRequest(host, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer sk-BM3Ezl79rnE88jQw8tSbJGTElj8Dcom4GF6ihGMy8sHw6mRY`,
-      },
-    });
-    return request
-      .post(`/v1/chat/completions`, {
-        model: "deepseek-r1",
-        messages: [{role: "user", content: prompt}],
-        stream: false,
-      });
-  };
-
 
 
   codeReview = async (patch) => {
@@ -76,7 +83,6 @@ export default class ChatGPT {
       return "";
     }
     const prompt = this.generatePrompt(patch);
-    // const res = await this.sendDeepSeekCloud(prompt);
     const res = await this.sendDeepSeek(prompt);
 
     if (res.status === 200) {

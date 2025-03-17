@@ -3,7 +3,6 @@ import path from "path";
 import flock from "proper-lockfile";
 
 const isDevelopment = process.env.NODE_ENV === "development";
-console.log("isDevelopment", process.env.NODE_ENV);
 const TASK_FILE = path.resolve(process.cwd(), isDevelopment ? "assets/task.json" : "dist/assets/task.json");
 // const TASK_FILE = path.resolve(process.cwd(), "assets/task.json");
 
