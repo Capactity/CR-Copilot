@@ -3,26 +3,8 @@ import { logger } from "./utils.js";
 import OpenAI from "openai";
 export default class ChatGPT {
   constructor(config) {
-    const baseUrl = "https://api.openai.com";
-    this.request = createRequest(baseUrl, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer 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`,
-      },
-      data: {
-        model: "gpt3.5-turbo",
-        temperature: 1,
-        top_p: 1,
-        presence_penalty: 1,
-        stream: false,
-        max_tokens: 1000,
-      },
-    });
     this.language = "Chinese";
 
-    this.openai = new OpenAI({
-      apiKey: "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",
-    });
   }
 
   generatePrompt = (patch) => {
@@ -32,25 +14,9 @@ export default class ChatGPT {
     `;
   };
 
-  sendMessage = async (msg) => {
-    const currentDate = new Date().toISOString().split("T")[0];
-    return this.request.post("/v1/chat/completions", {
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible.\n" +
-            "Knowledge cutoff: 2021-09-01\n" +
-            `Current date: ${currentDate}`,
-        },
-        { role: "user", content: msg, name: undefined },
-      ],
-    });
-  };
-
-
+  // deepseek
   sendDeepSeek = async (prompt) => {
-    const host = "http://192.168.1.210:11434";
+    const host = "http://xxx";
     const request = createRequest(host, {});
     return request
       .post(`/api/generate`, {
@@ -59,9 +25,9 @@ export default class ChatGPT {
         stream: false,
       });
   };
-
+  // 智谱api
   sendZP = async (prompt) => {
-    const host = "http://10.10.10.18:8080";
+    const host = "http://xxx";
     const request = createRequest(host, {});
     return request
       .post(`/api/generate`, {
@@ -71,7 +37,7 @@ export default class ChatGPT {
       });
   };
 
-//   curl https://api.lkeap.cloud.tencent.com/v1/chat/completions \
+// curl https://api.lkeap.cloud.tencent.com/v1/chat/completions \
 // -H "Content-Type: application/json" \
 // -H "Authorization: Bearer sk-BM3Ezl79rnE88jQw8tSbJGTElj8Dcom4GF6ihGMy8sHw6mRY" \
 // -d '{
