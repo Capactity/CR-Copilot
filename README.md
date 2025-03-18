@@ -3,8 +3,12 @@
 
 在 Gitlab 中使用 deepseek 或 其他模型（ ChatGPT等） 进行 CodeReview。当你在 GitLab 上创建一个新的 Merge request 时，机器人会自动进行代码审查，审查信息将显示在 MR timeline / file changes 中。
 
-## 流程原理
-
+## 特性
+符合公司安全规范，所有代码数据不出内网，所有推理过程均在内网完成。
+1. 开箱即用：基于 Gitlab CI的webhook，仅需url配置完成接入，自动捕获，MR触发时对 MR 进行 自动化CR，生成代码质量监测报告，自动插入discussion。
+2. 数据安全：目前已经接入了公司内部部署的deepseek版本，确保代码 CR 过程仅在内网环境下完成。
+3. 无调用次数限制：使用公司部署的本地化deepseek版本，没有其他成本。
+4. 评论到变更行：CR 助手将结果评论到变更代码行上。
 ## Usage
 ### 运行服务
 
@@ -25,7 +29,14 @@ Webhook URL示例:`http://xxx:4000/code-review?access_token=<access_token>`
 4. `GITLAB_URL` 你的gitlab仓库的host
 5. `TARGET_CR_FILE` 正则匹配需要`code review`的文件，默认检查.js/.jsx/.ts/.tsx结尾的文件
 
-## 说明
+
+## 实践步骤
+1. 配置Gitlab webhook, 生成access_token( setting / access_token )
+<img src="./images/step1.png" alt="step1"  />
+2. 开发代码提交feature分支生成commit
+3. 执行Gitlab Merge Request 触发评论
+<img src="./images/step3.png" alt="step1"  />
+
 
 ## Todo List
 
