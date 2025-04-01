@@ -1,6 +1,7 @@
 import createRequest from "./request.js";
-import { logger } from "./utils.js";
+import { config } from "./utils.js";
 import camelCase from "camelcase";
+import logger from './logger.js';
 
 
 const formatByCamelCase = (obj) => {
@@ -60,7 +61,8 @@ export default class Gitlab {
 
   constructor({ projectId, mrIId, accessToken }) {
     // 定义请求的主机地址
-    const host = "https://app.bmetech.com";
+    const host = config.gitlab.host;
+    console.log("host", host);
     // 创建请求对象，并传入请求参数
     this.request = createRequest(host, {
       params: { private_token: accessToken },
@@ -82,6 +84,53 @@ export default class Gitlab {
    *
    * @throws 如果请求失败，则抛出一个包含错误信息的Promise
    */
+  // async getChanges() {
+  //   try {
+  //     const res = await this.request.get(
+  //       `/api/v4/projects/${this.projectId}/merge_requests/${this.mrIId}/changes`
+  //     );
+  //     const { changes, diff_refs: diffRef, state } = res.data;
+  
+  //     // 获取所有符合条件的代码变更项
+  //     const codeChanges = await Promise.all(
+  //       changes
+  //         .map((item) => formatByCamelCase(item))
+  //         .filter((item) => {
+  //           const { newPath, renamedFile, deletedFile } = item;
+  //           if (renamedFile || deletedFile) return false;
+  //           if (!this.target.test(newPath)) return false;
+  //           return true;
+  //         })
+  //         .map(async (item) => {
+  //           const { lastOldLine, lastNewLine } = parseLastDiff(item.diff);
+  //           const refName = diffRef.head_sha; // 获取目标分支的 SHA
+  //           const fileContent = await this.getFileContent(item.newPath, refName);
+  //           const context = this.extractContext(fileContent, lastNewLine, 30); // ±3 行上下文
+  //           console.log("context", context);
+  //           return {
+  //             ...item,
+  //             lastNewLine,
+  //             lastOldLine,
+  //             context,
+  //           };
+  //         })
+  //     );
+  
+  //     return {
+  //       state,
+  //       changes: codeChanges,
+  //       ref: formatByCamelCase(diffRef),
+  //     };
+  //   } catch (error) {
+  //     logger.error(error);
+  //     return {
+  //       state: "",
+  //       changes: [],
+  //       ref: {},
+  //     };
+  //   }
+  // }
+  
   getChanges() {
     /** https://docs.gitlab.com/ee/api/merge_requests.html#get-single-merge-request-changes */
     return this.request
@@ -120,6 +169,38 @@ export default class Gitlab {
           ref: {},
         };
       });
+  }
+
+  async getFileContent(newPath, ref) {
+    const encodedPath = encodeURIComponent(newPath);
+    try {
+      const res = await this.request.get(
+        `/api/v4/projects/${this.projectId}/repository/files/${encodedPath}/raw`,
+        {
+          params: { ref },
+        }
+      );
+      return res.data;
+    } catch (err) {
+      logger.error(`Failed to fetch file content: ${newPath}`, err);
+      return "";
+    }
+  }
+
+  // 提取上下文
+  extractContext(content, targetLine, range = 30) {
+    // 如果目标行数为-1，则返回空字符串
+    if (targetLine === -1) return { before: "", target: "", after: "" };
+    // 将内容按行分割
+    const lines = content.split("\n");
+    // 计算起始行数，不能小于0
+    const start = Math.max(0, targetLine - range - 1);
+    const end = Math.min(lines.length, targetLine + range);
+    return {
+      before: lines.slice(start, targetLine - 1).join("\n"),
+      target: lines[targetLine - 1] || "",
+      after: lines.slice(targetLine, end).join("\n"),
+    };
   }
 
   postComment({ newPath, newLine, oldPath, oldLine, body, ref }) {

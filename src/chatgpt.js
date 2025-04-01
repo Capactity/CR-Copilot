@@ -1,10 +1,5 @@
 import createRequest from "./request.js";
-import { logger } from "./utils.js";
-import fs from 'fs';
-import path from 'path';
-const isDevelopment = process.env.NODE_ENV === "development";
-const configPath = path.resolve(process.cwd(), isDevelopment ? "assets/config.json" : "dist/assets/config.json");
-const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+import { config } from "./utils.js";
 
 export default class ChatGPT {
   constructor(configMsg) {
@@ -79,9 +74,9 @@ export default class ChatGPT {
 
   codeReview = async (patch) => {
     if (!patch) {
-      logger.error("patch is empty");
       return "";
     }
+    // console.log("开始调用chatgpt", patch);
     const prompt = this.generatePrompt(patch);
     const res = await this.sendDeepSeek(prompt);
 

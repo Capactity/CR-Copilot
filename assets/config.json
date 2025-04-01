@@ -11,5 +11,8 @@
     "host": "https://api.openai.com",
     "model": "gpt3.5-turbo",
     "api_key": "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"
+  },
+  "gitlab": {
+    "host": "https://app.bmetech.com"
   }
 } 

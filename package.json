@@ -22,7 +22,8 @@
     "nodemon": "^3.1.7",
     "openai": "^4.85.1",
     "path": "^0.12.7",
-    "proper-lockfile": "^4.1.2"
+    "proper-lockfile": "^4.1.2",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@babel/core": "^7.22.9",
