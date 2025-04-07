@@ -57,7 +57,7 @@ export default class ChatGPT {
       });
   };
 
-// curl https://api.lkeap.cloud.tencent.com/v1/chat/completions \
+// curl http://192.168.1.210:11434/v1/chat/completions \
 // -H "Content-Type: application/json" \
 // -H "Authorization: Bearer sk-BM3Ezl79rnE88jQw8tSbJGTElj8Dcom4GF6ihGMy8sHw6mRY" \
 // -d '{
@@ -76,10 +76,8 @@ export default class ChatGPT {
     if (!patch) {
       return "";
     }
-    // console.log("开始调用chatgpt", patch);
     const prompt = this.generatePrompt(patch);
     const res = await this.sendDeepSeek(prompt);
-
     if (res.status === 200) {
       return res.data.response;
     } else {

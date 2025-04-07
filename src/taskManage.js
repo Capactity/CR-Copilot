@@ -46,7 +46,8 @@ async function writeTasks(tasks) {
 }
 
 // 添加任务
-async function addTask(project, mergeId, status = "open", length) {
+async function addTask(data, status = "open", length) {
+    const project = data.project.name, mergeId = data.object_attributes.iid, userName = data.user.name;
     logger.info(`尝试添加新任务: ${project} - ${mergeId}`);
     incrementCounter(project, length); // 增加计数器
 
@@ -55,7 +56,7 @@ async function addTask(project, mergeId, status = "open", length) {
         logger.warn(`任务已存在: ${project} - ${mergeId}`);
         return;
     }
-    tasks.taskList.push({ project, mergeId, status });
+    tasks.taskList.push({ project, mergeId, status, userName });
     await writeTasks(tasks);
     logger.info(`成功添加任务: ${project} - ${mergeId}`);
 }

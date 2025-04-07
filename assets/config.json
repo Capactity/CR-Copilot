@@ -14,5 +14,20 @@
   },
   "gitlab": {
     "host": "https://app.bmetech.com"
-  }
+  },
+  "feishu": {
+    "app_id": "cli_a779fc930c30d01c",
+    "app_secret": "btOgpiPfJT7IT9srJUjK0eYOIYkU5y5t",
+    "host": "https://open.feishu.cn"
+  },
+  "user_list": [
+    {
+      "name": "蔡伟",
+      "user_id": "a5a3698d"
+    },
+    {
+      "name": "李秋雨",
+      "user_id": "ac5b67ed"
+    }
+  ]
 } 

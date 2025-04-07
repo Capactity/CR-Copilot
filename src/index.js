@@ -5,6 +5,7 @@ import Gitlab from "./gitlab.js";
 import * as dotenv from "dotenv";
 import { addTask, updateTask, deleteTask, getTasks } from "./taskManage.js";
 import logger from './logger.js';
+import { sendMessage } from "./message.js";
 
 const app = express();
 
@@ -24,7 +25,6 @@ app.post("/code-review", async (req, res) => {
   try {
     const { body, query } = req;
     const chatgpt = new ChatGPT();
-    
     const gitlab = new Gitlab({
       projectId: body.project.id,
       mrIId: body.object_attributes.iid,
@@ -56,7 +56,7 @@ app.post("/code-review", async (req, res) => {
       logger.warn(`⚠️ 任务已存在: ${body.project.name} - ${body.object_attributes.iid}`);
       return res.status(200).send({ status: "200", msg: "Task already exists" });
     } else {
-      await addTask(body.project.name, body.object_attributes.iid, state, changes.length);
+      await addTask(body, state, changes.length);
       for (let i = 0; i <= changes.length; i += 1) {
         const tasksList = await getTasks();
         const task = tasksList.find(task => task.mergeId === body.object_attributes.iid && task.project === body.project.name);
@@ -68,6 +68,7 @@ app.post("/code-review", async (req, res) => {
         }
         if(i === changes.length) {
           const message = '本次变更涉及的所有代码审查已完成，供参考，谢谢！';
+          await sendMessage(body.user.name, `项目${body.project.name}的MR#${body.object_attributes.iid}已完成代码审查，请前往仓库查看。`);
           await gitlab.codeReview({ message, ref, change: changes[i - 1] });
           // stopLoop = true;
         } else {

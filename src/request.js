@@ -21,6 +21,7 @@ const createRequest = (host, { headers, data, params }) => {
       return config;
     },
     function (error) {
+      console.log(error);
       return Promise.reject(error);
     }
   );
