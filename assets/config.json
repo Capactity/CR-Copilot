@@ -1,33 +1,25 @@
 {
   "api_config_deepseek": {
-    "host": "http://192.168.1.210:11434",
+    "host": "http://xxx",
     "model": "deepseek-r1:32b"
   },
   "api_config_glm": {
-    "host": "http://10.10.10.18:8080",
+    "host": "http://xxx",
     "model": "glm-4"
   },
   "api_config_chatgpt": {
     "host": "https://api.openai.com",
     "model": "gpt3.5-turbo",
-    "api_key": "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"
+    "api_key": "xxxx"
   },
   "gitlab": {
     "host": "https://app.bmetech.com"
   },
   "feishu": {
-    "app_id": "cli_a779fc930c30d01c",
-    "app_secret": "btOgpiPfJT7IT9srJUjK0eYOIYkU5y5t",
+    "app_id": "xxxx",
+    "app_secret": "xxxx",
     "host": "https://open.feishu.cn"
   },
   "user_list": [
-    {
-      "name": "蔡伟",
-      "user_id": "a5a3698d"
-    },
-    {
-      "name": "李秋雨",
-      "user_id": "ac5b67ed"
-    }
   ]
 } 
